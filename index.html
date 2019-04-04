@@ -1,0 +1,172 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather App</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    
+<script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAW3-YfBBj6KuZd__0rz1MwbxrFIJy_4jY",
+    authDomain: "weather-app66.firebaseapp.com",
+    databaseURL: "https://weather-app66.firebaseio.com",
+    projectId: "weather-app66",
+    storageBucket: "weather-app66.appspot.com",
+    messagingSenderId: "947674580989"
+  };
+  firebase.initializeApp(config);
+</script>
+
+    <style> 
+       #top{
+
+           background-color: rgba(21, 158, 168, 0.801);
+           box-shadow: 0px 0px 10px 0px rgba(25, 92, 97, 0.747);
+       }
+       h2{
+           color: white;
+           font-family: 'Courier New', Courier, monospace;
+           font-weight: bold;
+           font-size: 40px;
+       } 
+       #cityData{
+           color:rgba(21, 158, 168, 0.801);
+           border: 2px solid rgba(21, 158, 168, 0.801);
+          font-size: 18px;
+       }
+      .show{
+          background-color:rgba(21, 158, 168, 0.945);      
+      }
+      .hide{
+          display:none;
+      }
+      #footer{
+          height: 60px;
+          font-size: 22px;
+          font-family:cursive;
+
+      }
+       
+
+    </style>    
+</head>
+<body>
+        <script>
+                /*******************  Fetching Data from API  **********************/
+                function getData(){
+                    var cityName = document.getElementById("cityName").value;
+                    cityName = cityName.charAt(0).toUpperCase()+cityName.substr(1);
+                    console.log(cityName);
+                   const resp = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=1fe43d9929f8030901c45e6cad4a826b`;
+                   fetch(resp)
+                       .then(response =>response.json())
+                       .then(data => weatherDisplay(data))
+                       .catch(error => alert("Please enter a correct city name"));
+            }
+                /*******************  Displaying Data **********************/
+               function weatherDisplay(weatherData)
+               {
+                   const cityWeather = document.getElementById("cityData");
+                   cityWeather.innerHTML = "";
+                   cityWeather.innerHTML =  
+                   `
+                   <tr>
+                    <th>City Name: </th>
+                    <td>${weatherData.name}</td>
+                   </tr>
+                   <tr>
+                    <th>Country Code: </th>
+                    <td>${weatherData.sys.country}</td>
+                   </tr>
+                   <tr>
+                    <th>City ID: </th>
+                    <td>${weatherData.id}</td>
+                   </tr>
+                   <tr>
+                    <th>Weather Description: </th>
+                    <td>${weatherData.weather[0].description}</td>
+                   </tr>
+                   <tr>
+                    <th>Temperature: </th>
+                    <td>${Math.round(weatherData.main.temp-273,2)}&deg C</td>
+                   </tr>
+                   <tr>
+                    <th>Pressure: </th>
+                    <td>${weatherData.main.pressure} hPa</td>
+                   </tr>
+                   <tr>
+                    <th>Humidity: </th>
+                    <td>${weatherData.main.humidity}%</td>
+                   </tr>
+                   <tr>
+                    <th>Minimum Temperature:</th>
+                    <td>${Math.round(weatherData.main.temp_min-273)}&deg C</td>
+                   </tr>
+                   <tr>
+                    <th>Maximum Temperature:</th>
+                    <td>${Math.round(weatherData.main.temp_max-273)}&deg C</td>
+                   </tr>
+                   <tr>
+                    <th>Wind Speed:</th>
+                    <td>${weatherData.wind.speed*10} kmph</td>
+                   </tr>
+                   <tr>
+                    <th>Longitude:</th>
+                    <td>${weatherData.coord.lon}&deg E</td>
+                   </tr>
+                   <tr>
+                    <th>Latitude:</th>
+                    <td>${weatherData.coord.lat}&deg N</td>
+                   </tr>
+                   `
+                   document.getElementById('footer').className = "show";
+         }
+            
+            </script>
+    
+        <nav id = "top" class = "navbar">
+        <div class = "container">
+            <div  class = "col-xl-8 col-lg-8 col-md-6 col-sm-12 col-xs-12 ">
+                <h2><i class="fa fa-cloud" aria-hidden="true"></i> WEATHER APP</h2>
+                </div>
+                  <div class = "col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 my-auto">
+                    <form class = "form-inline">
+                     <input  id = "cityName" class = "form-control mr-2" type = "search" name = "cityName" placeholder = "Enter city name "/>
+                     <button type = "button" class = "btn  btn-info btn-lg" onClick = "getData()"><i class="fa fa-search" aria-hidden="true"></i></button>    
+                    </form>   
+                </div>
+        </div>
+            </nav>  
+        <div class = "container">
+             <br />
+             <br />
+             <br />
+             <table class = "table text-center table-striped" id = "cityData">
+
+             </table>
+        </div>
+        <footer id= "footer" class ="hide">
+            <div class = "container-fluid text-light ">
+                <div class = "container">
+                <div class ="row my-auto">
+                    <div class = "col-xl-6 col-lg-6 col-sm-12 my-auto"><i class="fa fa-pencil" aria-hidden="true"></i>   
+                 Designed By: Areeba Saleem 
+                 </div>
+                 <div class = "col-xl-6 col-lg-6 col-sm-12 my-auto"><i class="fa fa-envelope" aria-hidden="true"></i>
+                     areebasaleem66@gmail.com
+                 </div> 
+                </div>
+                </div>
+            </div>
+        </footer>   
+    </body>
+</html>
